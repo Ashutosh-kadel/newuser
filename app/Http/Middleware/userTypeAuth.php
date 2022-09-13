@@ -23,7 +23,14 @@ class userTypeAuth
                 return $next($request);
             }else{
                 
-                return redirect('/login')->with('error','Status is inactive or wrong credentials');
+                    // Auth::guard('web')->logout();
+            
+                    // $request->session()->invalidate();
+            
+                    // $request->session()->regenerateToken();
+            
+                    return redirect('/login');
+                
             }
 
         }else{

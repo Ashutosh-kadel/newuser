@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class adminTypeAuth
+class userAuth
 {
     /**
      * Handle an incoming request.
@@ -17,18 +16,12 @@ class adminTypeAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check()){
-
-            if(Auth::user()->type=='admin'){
-                return $next($request);
-            }else{
-                
-                return redirect('/login');
-            }
-
-        }else{
+        if($request->path()=="login" && $request->session()->has('user')){
             
-            return redirect('/login');
+            Auth::guard('web')->logout();
+
+            return redirect('/');
         }
+        return $next($request);
     }
 }
