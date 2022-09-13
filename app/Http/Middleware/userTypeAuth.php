@@ -19,17 +19,11 @@ class userTypeAuth
     {
         if(Auth::check()){
 
-            if(Auth::user()->type=='user' && Auth::user()->status=='1'){
-                return $next($request);
+            if(Auth::user()->type=='user'){
+                 return $next($request);
             }else{
-                
-                    // Auth::guard('web')->logout();
             
-                    // $request->session()->invalidate();
-            
-                    // $request->session()->regenerateToken();
-            
-                    return redirect('/login');
+                    return redirect()->route('user.dashboard');
                 
             }
 

@@ -20,9 +20,8 @@ class adminTypeAuth
         if(Auth::check()){
 
             if(Auth::user()->type=='admin'){
-                return $next($request);
+                  return $next($request);
             }else{
-                
                 return redirect('/login');
             }
 

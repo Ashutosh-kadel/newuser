@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,11 +29,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        $user = User::select('status')->where('email',$request->email)->first();
+        if($user['status']==0){
+            return redirect('/login')->with('error','User is inactive');
+        }else{
+             $request->authenticate();
 
         $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+            if(Auth::user()->type=='admin'){
+                return redirect()->route('admin.dashboard');
+            }else{
+                return redirect()->intended(RouteServiceProvider::HOME);
+            }
+        
+        }
+        
+       
     }
 
     /**
